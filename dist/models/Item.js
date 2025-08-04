@@ -21,26 +21,23 @@ class Raw extends Item {
 exports.Raw = Raw;
 class Manufactured extends Item {
     getTax() {
-        let Itemcost = 0.125 * this.price;
-        return Itemcost + (Itemcost + this.price) * 0.02;
+        const baseTax = this.price * 0.125;
+        return baseTax + (this.price + baseTax) * 0.02;
     }
 }
 exports.Manufactured = Manufactured;
 class Imported extends Item {
     getTax() {
         const importDuty = this.price * 0.1;
-        const finalamount = importDuty + this.price;
-        let surCharge = 0;
-        if (finalamount <= 100) {
-            surCharge = 5;
-        }
-        else if (finalamount <= 200) {
-            surCharge = 10;
-        }
-        else {
-            surCharge = 0.05 * finalamount;
-        }
-        return importDuty + surCharge;
+        const subtotal = this.price + importDuty;
+        let surcharge = 0;
+        if (subtotal <= 100)
+            surcharge = 5;
+        else if (subtotal <= 200)
+            surcharge = 10;
+        else
+            surcharge = subtotal * 0.05;
+        return importDuty + surcharge;
     }
 }
 exports.Imported = Imported;
